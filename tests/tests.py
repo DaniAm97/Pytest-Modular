@@ -33,9 +33,9 @@ def get_random_string():
 
 def login_and_return_bearer(api_request_context: APIRequestContext) -> str:
     data_login = {
-        "email": "hobeben160@angeleslid.com",
+        "email": "loyem65904@about27.com",
         "password": "123456",
-        "org_id": "5edfd39d-d9cd-43dc-ab36-748a03aed01d"
+        "org_id": "3f20f6c4-8c36-48a3-8505-2e89d1fe595c"
     }
 
     response = api_request_context.post(f"/api/v1/login", data=data_login)
@@ -55,7 +55,7 @@ def created_workspace_response(api_request_context: APIRequestContext, bearer) -
     data_workspace = {
 
             "name": "dani",
-            "org_id": "5edfd39d-d9cd-43dc-ab36-748a03aed01d",
+            "org_id": "3f20f6c4-8c36-48a3-8505-2e89d1fe595c",
             "type": "recruiting",
             "is_collaboration": False,
             "members": [],
@@ -63,15 +63,15 @@ def created_workspace_response(api_request_context: APIRequestContext, bearer) -
         }
     response = api_request_context.post("/api/v1/workspaces/", headers={"Authorization": f"bearer {bearer}"},
                                         data=data_workspace)
-    print(response.json())
-    # return response
+
+    return response
 
 
 
 
 @pytest.fixture()
 def created_workspace(created_workspace_response: APIResponse):
-    print(created_workspace_response.json())
+    return created_workspace_response.json()
 
 
 @pytest.fixture()
@@ -94,7 +94,7 @@ def create_topic_response(api_request_context: APIRequestContext, created_worksp
         "name": f"123456{get_random_string()}"
     }
 
-    ws_id = created_workspace["id"]
+    ws_id = created_workspace['id']
 
     response = api_request_context.post(f"/api/v1/workspaces/{ws_id}/topics/",
                                         headers={"Authorization": f"bearer {refreshed_bearer}"}, data=data_topic)
@@ -112,9 +112,9 @@ def test_create_topic(create_topic_response: APIResponse) -> None:
 
 @pytest.fixture()
 def create_skill_response(api_request_context: APIRequestContext, created_workspace: dict[str, Any],
-                          create_topic: dict[str, Any], refreshed_bearer) -> APIResponse:
+                          created_topic: dict[str, Any], refreshed_bearer) -> APIResponse:
     ws_id = created_workspace['id']
-    topic_id = create_topic['id']
+    topic_id = created_topic['id']
 
     data_skill = {
         "name": "skill",
